@@ -1,22 +1,20 @@
 const express = require('express');
-const connectDB = require('./config/db');
-const morgan = require('morgan');
+const cors = require('cors');
 
 const app = express();
 
-// Connect Database
-connectDB();
+// Use CORS middleware
+app.use(cors());
 
-// Init Middleware
-app.use(express.json());
+// OR
 
-// Use morgan to log requests to the console
-app.use(morgan('combined'));
+// Allow only specific origins
+app.use(cors({
+  origin: ['http://localhost:60588', 'https://watercard-back.onrender.com']
+}));
 
-// Define Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/water-usage', require('./routes/waterUsage'));
+// Your other middleware and routes go here
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+});
