@@ -1,6 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const cors = require('cors'); // Import CORS
+const morgan = require('morgan');
 
 const app = express();
 
@@ -10,8 +10,8 @@ connectDB();
 // Init Middleware
 app.use(express.json());
 
-// Use CORS
-app.use(cors()); // Enable CORS for all origins
+// Use morgan to log requests to the console
+app.use(morgan('combined'));
 
 // Define Routes
 app.use('/api/auth', require('./routes/auth'));
