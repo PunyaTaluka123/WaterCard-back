@@ -40,6 +40,17 @@ exports.logWaterUsage = async (req, res) => {
 
     await user.save();
 
+    // Update points in groups where the user is a member
+    const userGroups = await Group.find({ 'members.user': userId });
+
+    userGroups.forEach(async (group) => {
+      const member = group.members.find(m => m.user.toString() === userId);
+      if (member) {
+        member.points += pointsEarned;
+        await group.save();
+      }
+    });
+
     res.json({
       msg: 'Water usage logged successfully',
       pointsEarned,

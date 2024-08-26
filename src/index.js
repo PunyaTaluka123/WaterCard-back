@@ -1,20 +1,23 @@
 const express = require('express');
+const connectDB = require('./config/db');
 const cors = require('cors');
 
 const app = express();
 
-// Use CORS middleware
-app.use(cors());
+// Connect Database
+connectDB();
 
-// OR
+// Init Middleware
+app.use(express.json());
 
-// Allow only specific origins
-app.use(cors({
-  origin: ['http://localhost:60588', 'https://watercard-back.onrender.com']
-}));
+// Use CORS
+app.use(cors()); // Enable CORS for all origins
 
-// Your other middleware and routes go here
+// Define Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/water-usage', require('./routes/waterUsage'));
+app.use('/api/groups', require('./routes/group')); // Add this line to include group routes
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`Server is running on port ${process.env.PORT || 3000}`);
-});
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
